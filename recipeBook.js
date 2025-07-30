@@ -2,7 +2,24 @@
 // Initial object structure
 const recipeBook = {
   recipes: [],  // Array to store recipe objects
-  // Methods will be added here
+  addRecipe: function (name, ingredients, instructions, difficulty){
+    if (typeof name !== 'string' || name.trim() === ''){
+        console.log('Enter valid recipe name')
+         return;
+    }
+    if ( !Array.isArray(ingredients) || !Array.isArray(instructions)){
+        console.log("ingredients and instructions should be arrays")
+        return; 
+    }
+    const newRecipe = {
+        name: name,
+        ingredients: ingredients,
+        instructions: instructions,
+        difficulty: difficulty
+    };
+    this.recipes.push(newRecipe);
+    console.log(`${name} added to recipe book!`)
+  }
 };
 
 // Sample recipes for testing
@@ -20,6 +37,9 @@ recipeBook.recipes.push({
   difficulty: "Easy"
 });
 
+recipeBook.addRecipe("Pancakes", ["flour", "milk", "eggs"], ["Mix batter", "Cook on griddle"], "Easy");
+console.log(recipeBook.recipes)
+
 // Instructions/Tasks:
 // Build a Recipe Book Manager to store and manage recipes. Each recipe is an object with name (string), ingredients (array of strings), instructions (array of strings), and difficulty (string: "Easy", "Medium", "Hard").
 // Implement the following methods:
@@ -30,6 +50,7 @@ recipeBook.recipes.push({
 //    - Creates a recipe object and adds it to recipes array.
 //    - Logs confirmation (e.g., "Pancakes added to the recipe book!").
 //    - Test: recipeBook.addRecipe("Pancakes", ["flour", "milk", "eggs"], ["Mix batter", "Cook on griddle"], "Easy");
+
 
 // 2. searchByIngredient(ingredient)
 //    - Takes an ingredient (string) and returns an array of recipe names that include it (case-insensitive).

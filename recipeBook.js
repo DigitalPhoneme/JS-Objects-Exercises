@@ -19,9 +19,73 @@ const recipeBook = {
     };
     this.recipes.push(newRecipe);
     console.log(`${name} added to recipe book!`)
-  }
-};
+  },
 
+  searchByIngredient: function(ingredient){
+    // make the search word lowercase for case-insensitive matching
+    const lowerIng = ingredient.toLowerCase();
+    // filter () method to return recipes that contain ingredient
+    return this.recipes.filter(recipe =>{
+        // check if ANY ingredient in the recipe matches
+        return recipe.ingredients.some(ingredient => {
+            // make ingredients lowercase and check if included
+            return ingredient.toLowerCase().includes(lowerIng)
+        })
+    }).map(recipe => recipe.name)
+    
+  },
+
+listAllInstructions: function() {
+    // loop through each recipe
+  this.recipes.forEach((recipe, recipeIndex) => {
+    // print recipe name & number
+    console.log(`Recipe ${recipeIndex + 1}: ${recipe.name}`);
+    for (let i = 0; i < recipe.instructions.length; i++){
+        const instruction = recipe.instructions[i];
+        // format the string. Capital letter @ beginning. add missing period
+        const formatted = instruction.charAt(0).toUpperCase() + instruction.slice(1) + (instruction.endsWith('.') ? '' : '.') 
+        console.log(`${i + 1}. ${formatted}`)
+    }
+    console.log('')
+  })
+},
+
+getRecipesByDifficulty: function(difficulty){
+    const lowerDiff = difficulty.toLowerCase();
+    // find only recipes that match our difficuly param
+    const matchingRecipes = this.recipes.filter( recipe => {
+
+     return recipe.difficulty.toLowerCase() === lowerDiff
+})
+// for each recipe (filtered) make a new object w/ extra info
+    return matchingRecipes.map(recipe => {
+        // count num of ingredients in recipe
+        let totalIngredients = 0;
+        for (let j = 0; j< recipe.ingredients.length; j++){
+            totalIngredients++
+        }
+        // return new recipe object w/ added info
+        return {
+            ...recipe, // copy of original recipe's properties
+            totalSteps: recipe.instructions.length,
+            totalIngredients: totalIngredients,
+            summary: `This ${recipe.difficulty} recipe has ${totalIngredients} ingredients.`
+        }
+    })
+}
+
+  
+};
+//const index = 0;
+//   for (let i = 0; i < recipeBook.recipes.length; i++) {
+//     console.log(`Recipe ${i+1}: ${recipeBook.recipes[i].name}\n`);
+//     const instructions = recipeBook.recipes[i].instructions;
+//     for (let j = 0; j < instructions.length; j++) {
+//       let upper = instructions[j].charAt(index).toUpperCase();
+//       let newInstructions = upper + instructions[j].slice(1)
+//       console.log(`${j + 1}: ${newInstructions}.\n`);
+//     }
+//   }
 // Sample recipes for testing
 recipeBook.recipes.push({
   name: "Chocolate Cake",
@@ -40,6 +104,10 @@ recipeBook.recipes.push({
 recipeBook.addRecipe("Pancakes", ["flour", "milk", "eggs"], ["Mix batter", "Cook on griddle"], "Easy");
 console.log(recipeBook.recipes)
 
+console.log(recipeBook.searchByIngredient("eggs"));
+recipeBook.listAllInstructions();
+
+console.log(recipeBook.getRecipesByDifficulty("Easy"));
 // Instructions/Tasks:
 // Build a Recipe Book Manager to store and manage recipes. Each recipe is an object with name (string), ingredients (array of strings), instructions (array of strings), and difficulty (string: "Easy", "Medium", "Hard").
 // Implement the following methods:
